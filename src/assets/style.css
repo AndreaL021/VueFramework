@@ -1,0 +1,12 @@
+/* Rimuove frecce in Chrome, Safari e Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Rimuove frecce in Firefox */
+input[type="number"] {
+    -moz-appearance: textfield; /* Per Firefox */
+    appearance: textfield; /* Per altri browser */
+}
