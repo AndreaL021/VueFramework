@@ -29,8 +29,8 @@
           style="margin-right: auto"
         ></v-checkbox>
         <v-checkbox
-          label="dense"
-          v-model="dense"
+          label="outlined"
+          v-model="outlined"
           style="margin-right: auto"
         ></v-checkbox>
         <v-checkbox
@@ -46,7 +46,7 @@
         <v-textarea
           :rounded="rounded"
           :label="label"
-          :dense="dense"
+          :outlined="outlined"
           v-model="model"
           :rows="rows"
           :resizable="resizable"
@@ -91,7 +91,7 @@ export default {
     return {
       label: "label",
       rounded: false,
-      dense: false,
+      outlined: true,
       model: "",
       accordion_item: {
         title: "Source",
@@ -107,7 +107,7 @@ export default {
       "<v-textarea",
       ':rounded="' + this.rounded + '"',
       ':label="' + this.label + '"',
-      ':dense="' + this.dense + '"',
+      ':outlined="' + this.outlined + '"',
       ':rows="' + this.rows + '"',
       ':resizable="' + this.resizable + '"',
       'v-model="' + this.model + '"',
@@ -120,7 +120,7 @@ export default {
       "<v-textarea",
       ':rounded="' + this.rounded + '"',
       ':label="' + this.label + '"',
-      ':dense="' + this.dense + '"',
+      ':outlined="' + this.outlined + '"',
       ':rows="' + this.rows + '"',
       ':resizable="' + this.resizable + '"',
       'v-model="' + this.model + '"',
@@ -133,7 +133,7 @@ export default {
         "<v-textarea",
         ':rounded="' + this.rounded + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         ':rows="' + this.rows + '"',
         ':resizable="' + this.resizable + '"',
         'v-model="' + this.model + '"',
@@ -145,19 +145,19 @@ export default {
         "<v-textarea",
         ':rounded="' + this.rounded + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         ':rows="' + this.rows + '"',
         ':resizable="' + this.resizable + '"',
         'v-model="' + this.model + '"',
         "></v-textarea>",
       ];
     },
-    dense() {
+    outlined() {
       this.accordion_item.content = [
         "<v-textarea",
         ':rounded="' + this.rounded + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         ':rows="' + this.rows + '"',
         ':resizable="' + this.resizable + '"',
         'v-model="' + this.model + '"',

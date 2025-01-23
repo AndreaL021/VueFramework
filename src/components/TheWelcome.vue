@@ -1,17 +1,8 @@
 <template>
   <div style="text-align: center">
     <h1>VueJS Framework</h1>
-    <v-accordion width="70%" rounded :items="accordion_items">
-    <!-- <template #title="{ item }">
-      <span style="color: blue; font-size: 20px;">{{ item.title }}</span>
-    </template> -->
-    <!-- <template #content="{ item }">
-      <p style="font-style: italic; text-align: center;">{{ item.content }}</p>
-      {{ item.immagine }}
-    </template> -->
-  </v-accordion>
-    <input type="date">
-    <input type="datetime-local">
+    <!-- <input type="date">
+    <input type="datetime-local"> -->
     <!-- <input type="email">
     <input type="file">
     <input type="hidden">
@@ -27,7 +18,9 @@
     <input type="time">
     <input type="url">
     <input type="week"> -->
-
+  
+    <Accordion />
+    <Card />
     <TextInput />
     <TextArea />
     <Checkbox />
@@ -35,7 +28,6 @@
     <br>
     <br>
     <br>
-
 
 
 
@@ -114,27 +106,14 @@ import TextInput from './TextInput.vue';
 import TextArea from './TextArea.vue';
 import Checkbox from './CheckboxView/Checkbox.vue';
 import Dialog from './Dialog.vue';
+import Card from './Card.vue';
+import Accordion from './Accordion.vue';
 
 export default {
-  components: { TextInput, TextArea, Checkbox, Dialog },
+  components: { TextInput, TextArea, Checkbox, Dialog, Card, Accordion },
   name: "Framework",
   data() {
     return {
-      accordion_items:[{
-          title: "Sezione 1",
-          content: "Contenuto della sezione 1.",
-          immagine: "immagine1",
-        },
-        {
-          title: "Sezione 2",
-          content: "Contenuto della sezione 2.",
-          immagine: "immagine2",
-        },
-        {
-          title: "Sezione 3",
-          content: "Contenuto della sezione 3.",
-          immagine: "immagine3",
-        },],
       model_color:"#000000",
       snackbar: "",
       overlay: false,

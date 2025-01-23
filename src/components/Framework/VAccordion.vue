@@ -1,5 +1,6 @@
 <template>
     <div
+      
       class="accordion"
       :style="{ width: width, borderRadius: rounded ? '8px' : '' }"
     >
@@ -24,7 +25,8 @@
         :class="['accordion-content', { 'is-open': openIndex === index }]"
         :style="{
           maxHeight: openIndex === index ? computedHeights[index] : '0',
-          textAlign: 'left'
+          textAlign: 'left',
+          whiteSpace: 'pre-line'
         }"
       >
         <slot name="content" :item="item">
@@ -88,7 +90,6 @@ export default {
 <style scoped>
 .accordion {
   border: 1px solid #929292;
-  border-radius: 8px;
   overflow: hidden;
 }
 

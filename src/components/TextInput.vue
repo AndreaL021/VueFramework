@@ -34,8 +34,8 @@
           style="margin-right: auto"
         ></v-checkbox>
         <v-checkbox
-          label="dense"
-          v-model="dense"
+          label="outlined"
+          v-model="outlined"
           style="margin-right: auto"
         ></v-checkbox>
 
@@ -58,7 +58,7 @@
           :rounded="rounded"
           :clearable="clearable"
           :label="label"
-          :dense="dense"
+          :outlined="outlined"
           v-model="model"
           type="text"
           @input="checkContent"
@@ -68,7 +68,7 @@
           :rounded="rounded"
           :clearable="clearable"
           :label="label"
-          :dense="dense"
+          :outlined="outlined"
           type="number"
           v-model.number="model"
           @input="checkContent"
@@ -110,7 +110,7 @@ export default {
       label: "label",
       rounded: false,
       clearable: false,
-      dense: false,
+      outlined: true,
       model: "",
       type: "text",
       types: [{ text: "text" }, { text: "number" }],
@@ -127,7 +127,7 @@ export default {
         ':rounded="' + this.rounded + '"',
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -142,7 +142,7 @@ export default {
       ':rounded="' + this.rounded + '"',
       ':clearable="' + this.clearable + '"',
       ':label="' + this.label + '"',
-      ':dense="' + this.dense + '"',
+      ':outlined="' + this.outlined + '"',
       'type="' + this.type + '"',
       this.type == "number"
         ? 'v-model.number="' + this.model + '"'
@@ -157,7 +157,7 @@ export default {
         ':rounded="' + this.rounded + '"',
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -171,7 +171,7 @@ export default {
         ':rounded="' + this.rounded + '"',
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -185,7 +185,7 @@ export default {
         ':rounded="' + this.rounded + '"',
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -193,13 +193,13 @@ export default {
         "></v-input>",
       ];
     },
-    dense() {
+    outlined() {
       this.accordion_item.content = [
         "<v-input",
         ':rounded="' + this.rounded + '"',
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -213,7 +213,7 @@ export default {
         ':rounded="' + this.rounded + '"',
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
-        ':dense="' + this.dense + '"',
+        ':outlined="' + this.outlined + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
