@@ -59,12 +59,22 @@
       </v-col>
     </v-row>
     <v-dialog :persistent="persistent" v-model="model">
-      <div style="width: 300px">
+      <v-card rounded animation outlined>
+        <template #title>
+          <v-row>
+            <v-col :cols="4"></v-col>
+            <v-col :cols="4">Title</v-col>
+            <v-col :cols="4" display="flex" justify="end">
+              <button @click="model = false">
+                <fa-i icon="fa-solid fa-close" class="icon"></fa-i>
+              </button>
+            </v-col>
+          </v-row>
+        </template>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium
         earum consequuntur vero porro, et expedita rerum a facere? Doloremque
         veritatis at laudantium fugit eum quas magni eos. Similique, dicta sunt.
-      </div>
-      <button @click="model = false">chiudiDialog</button>
+      </v-card>
     </v-dialog>
   </div>
 </template>

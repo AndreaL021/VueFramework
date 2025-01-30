@@ -24,6 +24,11 @@
           style="margin-right: auto"
         ></v-input>
         <v-checkbox
+          label="readonly"
+          v-model="readonly"
+          style="margin-right: auto"
+        ></v-checkbox>
+        <v-checkbox
           label="rounded"
           v-model="rounded"
           style="margin-right: auto"
@@ -45,6 +50,7 @@
           @change="model = null"
           style="margin-right: auto"
         >
+        <option value="password">password</option>
           <option value="number">number</option>
           <option value="text">text</option>
         </select>
@@ -54,13 +60,14 @@
         style="display: flex; align-items: center; justify-content: center"
       >
         <v-input
-          v-if="type == 'text'"
+          v-if="type == 'text'|| type=='password'"
           :rounded="rounded"
           :clearable="clearable"
           :label="label"
           :outlined="outlined"
+          :readonly="readonly"
           v-model="model"
-          type="text"
+          :type="type"
           @input="checkContent"
         ></v-input>
         <v-input
@@ -110,10 +117,10 @@ export default {
       label: "label",
       rounded: false,
       clearable: false,
+      readonly: false,
       outlined: true,
       model: "",
       type: "text",
-      types: [{ text: "text" }, { text: "number" }],
       accordion_item: {
         title: "Source",
         content: [],
@@ -143,6 +150,7 @@ export default {
       ':clearable="' + this.clearable + '"',
       ':label="' + this.label + '"',
       ':outlined="' + this.outlined + '"',
+      ':readonly="' + this.readonly + '"',
       'type="' + this.type + '"',
       this.type == "number"
         ? 'v-model.number="' + this.model + '"'
@@ -158,6 +166,7 @@ export default {
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
         ':outlined="' + this.outlined + '"',
+        ':readonly="' + this.readonly + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -172,6 +181,7 @@ export default {
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
         ':outlined="' + this.outlined + '"',
+        ':readonly="' + this.readonly + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -186,6 +196,7 @@ export default {
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
         ':outlined="' + this.outlined + '"',
+        ':readonly="' + this.readonly + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -200,6 +211,7 @@ export default {
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
         ':outlined="' + this.outlined + '"',
+        ':readonly="' + this.readonly + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -214,6 +226,22 @@ export default {
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
         ':outlined="' + this.outlined + '"',
+        ':readonly="' + this.readonly + '"',
+        'type="' + this.type + '"',
+        this.type == "number"
+          ? 'v-model.number="' + this.model + '"'
+          : 'v-model="' + this.model + '"',
+        "></v-input>",
+      ];
+    },
+    readonly() {
+      this.accordion_item.content = [
+        "<v-input",
+        ':rounded="' + this.rounded + '"',
+        ':clearable="' + this.clearable + '"',
+        ':label="' + this.label + '"',
+        ':outlined="' + this.outlined + '"',
+        ':readonly="' + this.readonly + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'

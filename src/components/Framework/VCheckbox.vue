@@ -34,7 +34,6 @@
       "
       :size="size ? size : null"
     ></fa-i>
-
     <span style="display: flex; align-items: center; margin-left: 5px">{{
       label
     }}</span>

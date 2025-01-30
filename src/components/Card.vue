@@ -18,7 +18,7 @@
         style="display: flex; justify-content: left; padding-left: 0%"
       >
         <v-input label="title" style="margin-right: auto" v-model="title">
-        </v-input>animation
+        </v-input>
         <v-checkbox
           label="animation"
           v-model="animation"
@@ -104,80 +104,94 @@ export default {
   methods: {
     checkContent() {
       this.accordion_item.content = [
-        "<v-input",
+        "<v-card",
         ':animation="' + this.animation + '"',
         ':rounded="' + this.rounded + '"',
         ':outlined="' + this.outlined + '"',
         ':title="' + this.title + '"',
         ':shadow="' + this.shadow + '"',
+        ':bgColor=""',
+        ':bgColorTitle=""',
         ">Lorem ipsum</v-card>"
       ];
     },
   },
   mounted() {
     this.accordion_item.content = [
-        "<v-input",
+        "<v-card",
         ':animation="' + this.animation + '"',
         ':rounded="' + this.rounded + '"',
         ':outlined="' + this.outlined + '"',
         ':title="' + this.title + '"',
         ':shadow="' + this.shadow + '"',
+        ':bgColor=""',
+        ':bgColorTitle=""',
         ">Lorem ipsum</v-card>"
     ];
   },
   watch: {
     title() {
       this.accordion_item.content = [
-        "<v-input",
+        "<v-card",
         ':animation="' + this.animation + '"',
         ':rounded="' + this.rounded + '"',
         ':outlined="' + this.outlined + '"',
         ':title="' + this.title + '"',
         ':shadow="' + this.shadow + '"',
+        ':bgColor=""',
+        ':bgColorTitle=""',
         ">Lorem ipsum</v-card>"
       ];
     },
     rounded() {
       this.accordion_item.content = [
-        "<v-input",
+        "<v-card",
         ':animation="' + this.animation + '"',
         ':rounded="' + this.rounded + '"',
         ':outlined="' + this.outlined + '"',
         ':title="' + this.title + '"',
         ':shadow="' + this.shadow + '"',
+        ':bgColor=""',
+        ':bgColorTitle=""',
         ">Lorem ipsum</v-card>"
       ];
     },
     shadow() {
       this.accordion_item.content = [
-        "<v-input",
+        "<v-card",
         ':animation="' + this.animation + '"',
         ':rounded="' + this.rounded + '"',
         ':outlined="' + this.outlined + '"',
         ':title="' + this.title + '"',
         ':shadow="' + this.shadow + '"',
+        ':bgColor=""',
+        ':bgColorTitle=""',
         ">Lorem ipsum</v-card>"
       ];
     },
     outlined() {
       this.accordion_item.content = [
-        "<v-input",
+        "<v-card",
         ':animation="' + this.animation + '"',
         ':rounded="' + this.rounded + '"',
         ':outlined="' + this.outlined + '"',
         ':title="' + this.title + '"',
         ':shadow="' + this.shadow + '"',
+        ':bgColor=""',
+        ':bgColorTitle=""',
         ">Lorem ipsum</v-card>"
       ];
     },
     animation() {
       this.accordion_item.content = [
-        "<v-input",
+        "<v-card",
         ':animation="' + this.animation + '"',
         ':rounded="' + this.rounded + '"',
         ':outlined="' + this.outlined + '"',
         ':title="' + this.title + '"',
         ':shadow="' + this.shadow + '"',
+        ':bgColor=""',
+        ':bgColorTitle=""',
         ">Lorem ipsum</v-card>"
       ];
     },

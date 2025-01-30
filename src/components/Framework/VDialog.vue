@@ -1,5 +1,5 @@
 <template>
-  <div
+  <span
     class="dialog"
     v-if="modelValue"
     :style="{
@@ -8,15 +8,18 @@
     @click="chiudiDialog"
   >
     <span
+      class="dialog-content"
       @click.stop
       :style="{
         cursor: 'default',
-        backgroundColor: 'white',
+        display: 'inline-block',
+        backgroundColor: 'transparent',
+        width: width,
       }"
     >
       <slot></slot>
     </span>
-  </div>
+  </span>
 </template>
 <script>
 export default {
@@ -29,6 +32,10 @@ export default {
     persistent: {
       type: Boolean,
       default: false,
+    },
+    width: {
+      type: String,
+      default: "40%",
     },
   },
   watch: {
@@ -63,7 +70,13 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
+.dialog-content {
+  display: inline-block;
+  background: transparent;
+  max-width: 90%;
+  min-width: 200px;
+  transform: none;
+}
 .body-no-scroll {
   overflow: hidden;
   height: 100%;

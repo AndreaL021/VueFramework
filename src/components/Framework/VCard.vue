@@ -1,14 +1,12 @@
-
-
-
 <template>
   <div
     @mousemove="handleMouseMove"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     ref="card"
-    style="transform: scale(0.9);cursor: default;"
-    :class="{ 'card-animation': cardAnimation }"
+    style="transform: scale(0.9); cursor: default"
+    :style="{ width: width }"
+    :class="{ 'card-animation': animation }"
   >
     <div
       ref="cardContainer"
@@ -16,20 +14,27 @@
         rounded: rounded,
         outlined: outlined,
         shadow: shadow,
-        cardAnimation: animation,
       }"
-      :style="{ width: width }"
+      :style="{ backgroundColor: 'white' }"
     >
-      <div :class="{ 'card-content-animation': animation }">
-        <slot name="title">
-          <div
-            v-if="title"
-            style="border: solid grey; border-width: 0px 0px 1px 0px"
-          >
-            <span class="title">{{ title }}</span>
-          </div>
-        </slot>
-        <div :style="{ padding: '7px' }">
+      <div :class="{ 'card-content-animation': animation, rounded: rounded }">
+        <div
+          v-if="hasTitleContent"
+          style="border: solid grey; border-width: 0px 0px 1px 0px"
+          :style="{
+            backgroundColor: bgColorTitle,
+            borderRadius: rounded? '8px 8px 0px 0px':'0px'
+          }"
+          class="title"
+        >
+        <div>
+          <slot name="title" ref="title">
+            <span style="margin-left: auto; margin-right: auto;">{{ title }}</span>
+          </slot>
+
+        </div>
+        </div>
+        <div :style="{ padding: '10px' }">
           <slot> </slot>
         </div>
       </div>
@@ -57,11 +62,11 @@ export default {
     },
     bgColor: {
       type: String,
-      default: "auto",
+      default: "white",
     },
     bgColorTitle: {
       type: String,
-      default: "auto",
+      default: "white",
     },
     shadow: {
       type: Boolean,
@@ -73,8 +78,7 @@ export default {
     },
   },
   data() {
-    return {
-    };
+    return {};
   },
   mounted() {},
   computed: {
@@ -93,20 +97,25 @@ export default {
         );
       }
     },
+    hasTitleContent() {
+      return this.title || this.$slots.title;
+    },
   },
   methods: {
     handleMouseMove(mouseEvent) {
       if (this.animation) {
         let card = this.$refs.card;
         let cardContainer = this.$refs.cardContainer;
-        let mouseX = mouseEvent.pageX;
-        let mouseY = mouseEvent.pageY;
 
-        const centerX = card.offsetLeft + card.clientWidth / 2;
-        const centerY = card.offsetTop + card.clientHeight / 2;
+    let rect = card.getBoundingClientRect();
+        let mouseX = mouseEvent.clientX- rect.left;
+        let mouseY = mouseEvent.clientY- rect.top;
 
-        const percentX = (mouseX - centerX) / (card.clientWidth / 2);
-        const percentY = -((mouseY - centerY) / (card.clientHeight / 2));
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+        const percentX = (mouseX - centerX) / (rect.width / 2);
+        const percentY = -((mouseY - centerY) / (rect.height / 2));
 
         cardContainer.style.transform =
           "perspective(400px) rotateY(" +
@@ -156,6 +165,8 @@ export default {
 .title {
   font-size: 24px;
   font-weight: bold;
+  padding: 5px;
+  display: block;
 }
 
 .card-animation {
@@ -164,7 +175,6 @@ export default {
 }
 .card-content-animation {
   color: black;
-  text-align: center;
   transform: translateZ(80px);
 }
 </style>

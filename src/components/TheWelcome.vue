@@ -19,6 +19,7 @@
     <input type="url">
     <input type="week"> -->
   
+    <Autocomplete />
     <Accordion />
     <Card />
     <TextInput />
@@ -108,9 +109,10 @@ import Checkbox from './CheckboxView/Checkbox.vue';
 import Dialog from './Dialog.vue';
 import Card from './Card.vue';
 import Accordion from './Accordion.vue';
+import Autocomplete from './Autocomplete.vue';
 
 export default {
-  components: { TextInput, TextArea, Checkbox, Dialog, Card, Accordion },
+  components: { TextInput, TextArea, Checkbox, Dialog, Card, Accordion, Autocomplete },
   name: "Framework",
   data() {
     return {

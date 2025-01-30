@@ -1,55 +1,76 @@
+
+
+
 <template>
-  <div class="input-container" :style="{ width: width }">
+  <div
+    class="input-container"
+    :class="{
+      focused: isFocused,
+      value: isValuePresent,
+      outlined: outlined,
+      rounded: rounded,
+    }"
+    :style="{
+      width: width,
+      height: '24px',
+      padding: clearable&&!readonly ? '5px 30px 5px 5px' : '5px 5px 5px 5px',
+    }"
+    @blur="onBlur"
+  >
+    <span @click="onFocus" class="label">{{ label }}</span>
     <input
-      @focus="dropdown = true"
-      @focusout="dropdown = false"
-      style="width: 100%"
+      ref="Input"
+      style="width: 100%; padding-left: 0; margin-top: 10px"
       type="text"
-      :value="modelValue"
-      @input="updateModelValue($event.target.value)"
-      :readonly="!search"
+      v-model="model"
+      :readonly="readonly || !search"
+      @input="filtra()"
+      @focus="onFocus"
+      @blur="onBlur"
     />
-  </div>
-  <transition name="fade" appear>
-    <div
-      v-show="dropdown"
-      class="item-container"
-      :style="{ width: width == 'auto' ? '98%' : width }"
-    >
+    <!-- @blur="onBlur" -->
+    <slot name="appendIcon">
+      <fa-i
+        v-if="clearable&&!readonly && model"
+        @click="onFocus, selectItem(model, true)"
+        icon="fa-solid fa-circle-xmark"
+        class="appendIcon"
+        :size="outlined ? 'lg' : null"
+      ></fa-i>
+    </slot>
+    <transition name="fade" appear>
       <div
-        v-for="(item, i) in filteredItems"
-        :key="i"
-        class="item"
-        @click="select(item)"
+        v-show="dropdown && !readonly"
+        class="item-container"
+        :style="{ width: '100%' }"
+        @mousedown="onDropdownMouseDown"
       >
-        {{ itemText != null ? item[itemText] : item }}
+        <div
+          v-for="(item, i) in filteredItems"
+          :key="i"
+          class="item"
+          @click="selectItem(item)"
+        >
+          {{ itemText != null ? item[itemText] : item }}
+        </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      filteredItems: [],
-      dropdown: false,
-    };
-  },
   props: {
-    search: {
-      type: Boolean,
-      default: true,
-    },
-    width: {
+    label: {
       type: String,
-      default: "auto",
+      default: "",
+    },
+    modelValue: {
+      type: [String, Number],
+      default: "",
     },
     items: {
       type: Array,
       default: [],
-    },
-    modelValue: {
-      type: [String, Number],
     },
     itemText: {
       type: String,
@@ -59,9 +80,44 @@ export default {
       type: String,
       default: null,
     },
+    width: {
+      type: String,
+      default: "auto",
+    },
+    rounded: {
+      type: Boolean,
+      default: false,
+    },
+    clearable: {
+      type: Boolean,
+      default: false,
+    },
+    outlined: {
+      type: Boolean,
+      default: true,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+    search: {
+      type: Boolean,
+      default: true,
+    },
   },
-  computed: {},
+  data() {
+    return {
+      isFocused: false, // Gestisce lo stato di focus
+      model: "",
+      filteredItems: [],
+      dropdown: false,
+      isClickingDropdownItem: false,
+    };
+  },
   mounted() {
+    if (!this.itemText && !this.itemValue) {
+      this.model = this.modelValue;
+    }
     this.filteredItems = Array.from(this.items);
   },
   watch: {
@@ -78,51 +134,147 @@ export default {
       }
     },
   },
-  emits: ["change", "update:modelValue"],
-  methods: {
-    updateModelValue(value) {
-      this.$emit("update:modelValue", { name: value, url: "" });
-      
+  computed: {
+    isValuePresent() {
+      return (
+        this.model !== null && this.model !== undefined && this.model !== ""
+      );
     },
+  },
+  methods: {
     filtra() {
-      if (this.itemText != null) {
+      if (this.itemText && this.itemValue) {
         this.filteredItems = this.items.filter((i) =>
-          this.itemText
-            ? i[this.itemText]
-                .toLowerCase()
-                .includes(this.modelValue.toLowerCase())
-            : i.toLowerCase().includes(this.modelValue.toLowerCase())
+          i[this.itemText]
+            .toString()
+            .toLowerCase()
+            .includes(this.model.toString().toLowerCase())
         );
       } else {
         this.filteredItems = this.items.filter((i) =>
-          i.toLowerCase().includes(this.modelValue.toLowerCase())
+          i
+            .toString()
+            .toLowerCase()
+            .includes(this.model.toString().toLowerCase())
         );
       }
     },
-    select(item) {
+    selectItem(item, clear) {
+      if (clear) {
+        item = "";
+      }
+      if (!this.itemValue && !this.itemText) {
+        this.model = item;
+      } else {
+        this.model = item[this.itemText];
+      }
       this.$emit(
         "update:modelValue",
         this.itemValue ? item[this.itemValue] : item
       );
-      
+      this.$emit("change");
+
       this.dropdown = false;
+      this.isClickingDropdownItem = false;
+    },
+    onFocus() {
+      this.$refs.Input.focus();
+      this.isFocused = true;
+      this.dropdown = true;
+      this.filteredItems=Array.from(this.items)
+    },
+    onBlur() {
+      if (!this.isClickingDropdownItem) {
+        this.isFocused = false;
+        this.dropdown = false;
+        if (this.itemText) {
+          this.model = this.filteredItems.find((i)=>i[this.itemValue]==this.modelValue)?
+          this.filteredItems.find((i)=>i[this.itemValue]==this.modelValue)[this.itemText]:"";
+        } else {
+          this.model = this.modelValue;
+        }
+      }
+    },
+    onDropdownMouseDown() {
+      this.isClickingDropdownItem = true;
     },
   },
 };
 </script>
 <style scoped>
 .input-container {
-  border: solid black 1px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding-right: 10px;
-  padding-left: 5px;
-  overflow: visible;
+  margin-top: 12px;
+  background: rgb(240, 240, 240);
+  border: solid grey;
+  border-width: 0 0 1px 0;
+  padding-top: 2px !important;
+  padding-bottom: 4px !important;
   position: relative;
-  height: 24px;
+  overflow: visible;
+}
+
+.input-container.outlined {
+  margin-top: 12px;
+  border: solid grey 1px;
+  transition: border-color 0.3s;
+  position: relative;
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.input-container.focused {
+  border-color: black;
+}
+
+.label {
+  color: grey;
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease; /* Animazione */
+  pointer-events: none;
+}
+
+.input-container.value .label,
+.input-container.value .label {
+  top: 7px;
+  font-size: 13px;
+  color: grey;
+}
+.input-container.focused .label,
+.input-container.focused .label {
+  top: 7px;
+  font-size: 13px;
+  color: black;
+}
+
+.input-container:hover .appendIcon,
+.input-container:hover .appendIcon {
+  opacity: 1;
+}
+.appendIcon {
+  font-size: 17px;
+  color: grey;
+  position: absolute;
+  cursor: pointer;
+  opacity: 0;
+  top: 8px;
+  right: 5px;
+}
+.appendIcon:hover {
+  color: black;
+}
+
+input {
+  border: none;
+  padding-left: 0; /* Rimuove il padding a sinistra */
+  background-color: transparent;
+}
+input:focus {
+  outline: none;
 }
 .item-container {
   position: absolute;
@@ -145,22 +297,5 @@ export default {
 .item:hover {
   cursor: pointer;
   background-color: grey;
-}
-input {
-  border: none;
-  border-radius: 15px;
-}
-input:focus {
-  border: none !important;
-  border-radius: 15px;
-  outline: none;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.5s ease-out;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

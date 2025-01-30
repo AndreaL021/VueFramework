@@ -5,7 +5,8 @@
         flexWrap: 'wrap',
         justifyContent: justify,
         margin:margin,
-        backgroundColor:bgColor
+        backgroundColor:bgColor,
+        width:width
     }"
     >
     <slot></slot>
@@ -30,12 +31,16 @@ export default {
     },
     margin:{
         type:String,
-        default:'5px'
+        default:'0px'
     },
     bgColor:{
         type:String,
         default:''
     },
+    width: {
+        type:String,
+        default:'100%'
+    }
   },
   provide() {
     return {

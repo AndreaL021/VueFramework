@@ -8,15 +8,16 @@
     :style="{
       width: width,
       height: '24px',
-      padding: clearable ? '5px 30px 5px 5px' : '5px 5px 5px 5px',
+      padding:clearable&&type=='password' ? '5px 50px 5px 5px' : clearable||type=='password' ? '5px 30px 5px 5px' : '5px 5px 5px 5px',
     }"
   >
     <span @click="focusInput" class="label">{{ label }}</span>
     <input
       ref="Input"
       style="width: 100%; padding-left: 0; margin-top: 10px"
-      :type="type"
+      :type="type_wrapper"
       :value="modelValue"
+      :readonly="readonly"
       @focus="onFocus"
       @blur="onBlur"
       @input="updateModelValue($event.target.value)"
@@ -24,16 +25,27 @@
     />
     <slot name="appendIcon">
       <fa-i
-        v-if="clearable"
+        v-if="clearable&&modelValue"
         @click="updateModelValue(modelValue, true)"
         icon="fa-solid fa-circle-xmark"
         class="appendIcon"
         :style="{
-          top: outlined ? '7px' : '5px',
+          top: '9px',
+          right: type=='password'?'30px':'5px'
         }"
-        :size="outlined ? 'lg' : null"
       ></fa-i>
     </slot>
+      <fa-i
+        v-if="type=='password'"
+        @click="type_wrapper=type_wrapper=='password'?'text':'password'"
+        :icon="type_wrapper=='password'?'fa-solid fa-eye':'fa-solid fa-eye-slash'"
+        class="appendIcon"
+        :style="{
+          top: '9px',
+          right: '5px',
+          opacity: '1'
+        }"
+      ></fa-i>
   </div>
 </template>
 <script>
@@ -67,16 +79,23 @@ export default {
       type: Boolean,
       default: true,
     },
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       isFocused: false, // Gestisce lo stato di focus
+      type_wrapper:'text'
     };
   },
-  mounted() {},
+  mounted() {
+    this.type_wrapper=this.type
+  },
   computed: {
     isValuePresent() {
-      if (this.type == "text") {
+      if (this.type == "text"||this.type == "password") {
         return (
           this.modelValue !== null &&
           this.modelValue !== undefined &&
@@ -94,7 +113,7 @@ export default {
   methods: {
     updateModelValue(value, clear) {
       if (clear) {
-        value = this.type == "text" ? "" : 0;
+        value = this.type == "text"||this.type == "password" ? "" : 0;
       }
       this.$emit("update:modelValue", value);
     },
@@ -130,7 +149,7 @@ export default {
   border: solid grey;
   border-width: 0 0 1px 0;
   padding-top: 2px !important;
-  padding-bottom: 2px !important;
+  padding-bottom: 4px !important;
   position: relative;
 }
 
@@ -177,9 +196,9 @@ export default {
   opacity: 1;
 }
 .appendIcon {
+  font-size: 17px;
   color: grey;
   position: absolute;
-  right: 5px;
   cursor: pointer;
   opacity: 0;
 }
