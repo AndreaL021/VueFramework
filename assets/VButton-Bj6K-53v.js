@@ -1,0 +1,1 @@
+import{_ as t,c as o,d as s,o as n}from"./index-F49bye3j.js";const c={},a={class:"button"};function r(e,d){return n(),o("div",a,[s(e.$slots,"default",{},void 0)])}const f=t(c,[["render",r],["__scopeId","data-v-5e9215b7"]]);export{f as default};

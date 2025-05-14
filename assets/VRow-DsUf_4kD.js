@@ -1,0 +1,1 @@
+import{_ as s,c as a,d as o,n,o as r}from"./index-F49bye3j.js";const d={props:{justify:{type:String,default:"flex-start"}}};function f(e,l,t,c,i,p){return r(),a("div",{class:"row",style:n({display:"flex",justifyContent:t.justify})},[o(e.$slots,"default",{},void 0)],4)}const _=s(d,[["render",f],["__scopeId","data-v-87ad0f4b"]]);export{_ as default};
