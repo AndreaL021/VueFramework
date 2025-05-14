@@ -1,22 +1,17 @@
 <template>
-  <div>
-    <v-row
-      style="
-        width: 70%;
-        border: solid 1px black;
-        padding: 5px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: space-evenly;
-      "
-    >
+  <div
+    style="
+      width: 70%;
+      border: solid 1px black;
+      padding: 5px;
+      margin-left: auto;
+      margin-right: auto;
+    "
+  >
+    <v-row>
       <!-- titolo -->
       <v-col><h3>v-input</h3></v-col>
-      <v-col
-        :cols="3"
-        style="display: flex; justify-content: left; padding-left: 0%"
-      >
+      <v-col style="display: flex; justify-content: left; padding-left: 0%">
         <v-input
           type="text"
           label="label"
@@ -50,17 +45,22 @@
           @change="model = null"
           style="margin-right: auto"
         >
-        <option value="password">password</option>
+          <option value="password">password</option>
           <option value="number">number</option>
           <option value="text">text</option>
         </select>
       </v-col>
       <v-col
-        :cols="3"
-        style="display: flex; align-items: center; justify-content: center"
+        style="
+          margin-top: 40px;
+          margin-bottom: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
       >
         <v-input
-          v-if="type == 'text'|| type=='password'"
+          v-if="type == 'text' || type == 'password'"
           :rounded="rounded"
           :clearable="clearable"
           :label="label"
@@ -81,32 +81,25 @@
           @input="checkContent"
         ></v-input>
       </v-col>
-      <v-col>
-        <!-- Accordion -->
-        <v-accordion
-          rounded
-          :items="[accordion_item]"
-          style="width: 80%; margin-left: auto; margin-right: auto"
-        >
-          <template #content="{ item }">
-            <v-row style="justify-content: center">
-              <v-col
-                :cols="6"
-                style="display: flex; justify-content: left; align-items: start"
-              >
-                <div v-for="(obj, i) in item.content" :key="i">
-                  <span>{{
-                    i != 0 && i != item.content.length - 1
-                      ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
-                      : obj
-                  }}</span>
-                </div>
-              </v-col>
-            </v-row>
-          </template>
-        </v-accordion>
-      </v-col>
     </v-row>
+    <!-- Accordion -->
+    <v-accordion :items="[accordion_item]">
+      <template #content="{ item }">
+        <v-row justify="center">
+          <v-col
+            :cols="4"
+          >
+            <div v-for="(obj, i) in item.content" :key="i">
+              <span>{{
+                i != 0 && i != item.content.length - 1
+                  ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
+                  : obj
+              }}</span>
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+    </v-accordion>
   </div>
 </template>
 <script>
@@ -135,6 +128,7 @@ export default {
         ':clearable="' + this.clearable + '"',
         ':label="' + this.label + '"',
         ':outlined="' + this.outlined + '"',
+        ':readonly="' + this.readonly + '"',
         'type="' + this.type + '"',
         this.type == "number"
           ? 'v-model.number="' + this.model + '"'
@@ -144,110 +138,26 @@ export default {
     },
   },
   mounted() {
-    this.accordion_item.content = [
-      "<v-input",
-      ':rounded="' + this.rounded + '"',
-      ':clearable="' + this.clearable + '"',
-      ':label="' + this.label + '"',
-      ':outlined="' + this.outlined + '"',
-      ':readonly="' + this.readonly + '"',
-      'type="' + this.type + '"',
-      this.type == "number"
-        ? 'v-model.number="' + this.model + '"'
-        : 'v-model="' + this.model + '"',
-      "></v-input>",
-    ];
+    this.checkContent();
   },
   watch: {
     label() {
-      this.accordion_item.content = [
-        "<v-input",
-        ':rounded="' + this.rounded + '"',
-        ':clearable="' + this.clearable + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':readonly="' + this.readonly + '"',
-        'type="' + this.type + '"',
-        this.type == "number"
-          ? 'v-model.number="' + this.model + '"'
-          : 'v-model="' + this.model + '"',
-        "></v-input>",
-      ];
+      this.checkContent();
     },
     rounded() {
-      this.accordion_item.content = [
-        "<v-input",
-        ':rounded="' + this.rounded + '"',
-        ':clearable="' + this.clearable + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':readonly="' + this.readonly + '"',
-        'type="' + this.type + '"',
-        this.type == "number"
-          ? 'v-model.number="' + this.model + '"'
-          : 'v-model="' + this.model + '"',
-        "></v-input>",
-      ];
+      this.checkContent();
     },
     clearable() {
-      this.accordion_item.content = [
-        "<v-input",
-        ':rounded="' + this.rounded + '"',
-        ':clearable="' + this.clearable + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':readonly="' + this.readonly + '"',
-        'type="' + this.type + '"',
-        this.type == "number"
-          ? 'v-model.number="' + this.model + '"'
-          : 'v-model="' + this.model + '"',
-        "></v-input>",
-      ];
+      this.checkContent();
     },
     outlined() {
-      this.accordion_item.content = [
-        "<v-input",
-        ':rounded="' + this.rounded + '"',
-        ':clearable="' + this.clearable + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':readonly="' + this.readonly + '"',
-        'type="' + this.type + '"',
-        this.type == "number"
-          ? 'v-model.number="' + this.model + '"'
-          : 'v-model="' + this.model + '"',
-        "></v-input>",
-      ];
+      this.checkContent();
     },
     type() {
-      this.accordion_item.content = [
-        "<v-input",
-        ':rounded="' + this.rounded + '"',
-        ':clearable="' + this.clearable + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':readonly="' + this.readonly + '"',
-        'type="' + this.type + '"',
-        this.type == "number"
-          ? 'v-model.number="' + this.model + '"'
-          : 'v-model="' + this.model + '"',
-        "></v-input>",
-      ];
+      this.checkContent();
     },
     readonly() {
-      this.accordion_item.content = [
-        "<v-input",
-        ':rounded="' + this.rounded + '"',
-        ':clearable="' + this.clearable + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':readonly="' + this.readonly + '"',
-        'type="' + this.type + '"',
-        this.type == "number"
-          ? 'v-model.number="' + this.model + '"'
-          : 'v-model="' + this.model + '"',
-        "></v-input>",
-      ];
+      this.checkContent();
     },
   },
 };

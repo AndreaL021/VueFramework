@@ -1,5 +1,9 @@
 <template>
-  <div ref="snackbar" class="snackbar" :style="{ backgroundColor:bgColor?bgColor:'#333'}">
+  <div
+    ref="snackbar"
+    class="snackbar"
+    :style="{ backgroundColor: bgColor, color: color  }"
+  >
     {{ msg }}
   </div>
 </template>
@@ -7,44 +11,42 @@
   <script>
 export default {
   props: {
-    modelValue:{
-        type:String,
-        default:''
+    modelValue: {
+      type: String,
+      default: "",
     },
-    bgColor:{
-        type:String,
-        default:''
+    bgColor: {
+      type: String,
+      default: "rgb(72, 109, 254)",
+    },
+    color: {
+      type: String,
+      default: "white",
     },
   },
   data() {
     return {
-        msg:""
-    }
+      msg: "",
+    };
   },
-  watch:{
-    modelValue(newVal){
-        console.log(newVal);
-        if (newVal) {
-            this.msg=this.modelValue
-            this.show();
-        }
-    }
+  watch: {
+    modelValue(newVal) {
+      if (newVal) {
+        this.msg = this.modelValue;
+        this.show();
+      }
+    },
   },
   methods: {
     show() {
-      var x = this.$refs.snackbar
-        console.log(x.className);
+      var x = this.$refs.snackbar;
       x.className += " show";
-        console.log(x.className);
-        // y=this.$emit
+      // y=this.$emit
       setTimeout(function () {
         x.className = x.className.replace("show", "");
-        this.msg="";
-        console.log(x);
-
+        this.msg = "";
       }, 4000);
       this.$emit("update:modelValue", "");
-           
     },
   },
 };

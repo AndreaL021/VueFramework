@@ -4,7 +4,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
     ref="card"
-    style="transform: scale(0.9); cursor: default"
+    style="cursor: default"
     :style="{ width: width }"
     :class="{ 'card-animation': animation }"
   >
@@ -15,7 +15,6 @@
         outlined: outlined,
         shadow: shadow,
       }"
-      :style="{ backgroundColor: 'white' }"
     >
       <div :class="{ 'card-content-animation': animation, rounded: rounded }">
         <div
@@ -23,25 +22,34 @@
           style="border: solid grey; border-width: 0px 0px 1px 0px"
           :style="{
             backgroundColor: bgColorTitle,
-            borderRadius: rounded? '8px 8px 0px 0px':'0px'
+            borderRadius: rounded ? '8px 8px 0px 0px' : '0px',
+            color: colorTitle
           }"
           class="title"
         >
-        <div>
-          <slot name="title" ref="title">
-            <span style="margin-left: auto; margin-right: auto;">{{ title }}</span>
-          </slot>
-
+          <div>
+            <slot name="title" ref="title">
+              <span style="margin-left: auto; margin-right: auto">{{
+                title
+              }}</span>
+            </slot>
+          </div>
         </div>
-        </div>
-        <div :style="{ padding: '10px' }">
+        <div
+          :style="{
+            borderRadius: rounded ? '0px 0px 8px 8px' : '0px',
+            padding: '10px',
+            backgroundColor: bgColor,
+            color: color
+          }"
+        >
           <slot> </slot>
         </div>
       </div>
     </div>
   </div>
 </template>
-  <script>
+<script>
 export default {
   props: {
     outlined: {
@@ -59,6 +67,14 @@ export default {
     width: {
       type: String,
       default: "auto",
+    },
+    color: {
+      type: String,
+      default: "black",
+    },
+    colorTitle: {
+      type: String,
+      default: "black",
     },
     bgColor: {
       type: String,
@@ -107,12 +123,12 @@ export default {
         let card = this.$refs.card;
         let cardContainer = this.$refs.cardContainer;
 
-    let rect = card.getBoundingClientRect();
-        let mouseX = mouseEvent.clientX- rect.left;
-        let mouseY = mouseEvent.clientY- rect.top;
+        let rect = card.getBoundingClientRect();
+        let mouseX = mouseEvent.clientX - rect.left;
+        let mouseY = mouseEvent.clientY - rect.top;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
 
         const percentX = (mouseX - centerX) / (rect.width / 2);
         const percentY = -((mouseY - centerY) / (rect.height / 2));

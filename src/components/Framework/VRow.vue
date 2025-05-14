@@ -1,56 +1,24 @@
 <template>
-    <div :style="{
-        display:'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: justify,
-        margin:margin,
-        backgroundColor:bgColor,
-        width:width
-    }"
-    >
-    <slot></slot>
-    </div>
+  <div class="row" :style="{
+    display: 'flex',
+    justifyContent :justify
+  }">
+    <slot />
+  </div>
 </template>
-  
-  <script>
+<script>
 export default {
-  data() {
-    return {
-      providedMaxCols: this.maxCols
-    };
-  },
-  props: {
+  props:{
     justify:{
-        type:String,
-        default:'start'
-    },
-    maxCols:{
-        type:Number,
-        default:12
-    },
-    margin:{
-        type:String,
-        default:'0px'
-    },
-    bgColor:{
-        type:String,
-        default:''
-    },
-    width: {
-        type:String,
-        default:'100%'
-    }
-  },
-  provide() {
-    return {
-      maxCols: () => this.providedMaxCols
-    };
-  },
-  watch: {
-    maxCols(newVal) {
-      this.providedMaxCols = newVal;
+      type:String,
+      default: 'flex-start'
     }
   }
-};
+}
 </script>
+<style scoped>
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>

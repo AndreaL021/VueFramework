@@ -1,20 +1,18 @@
 <template>
-  <div>
-    <v-row
-      style="
-        width: 70%;
-        border: solid 1px black;
-        padding: 5px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: space-evenly;
-      "
-    >
+  <div
+    style="
+      width: 70%;
+      border: solid 1px black;
+      padding: 5px;
+      margin-left: auto;
+      margin-right: auto;
+    "
+  >
+    <v-row justify="space-evenly">
       <!-- titolo -->
       <v-col><h3>v-dialog</h3></v-col>
       <v-col
-        :cols="3"
+        :cols="2"
         style="display: flex; justify-content: center; align-items: center"
       >
         <v-checkbox
@@ -24,40 +22,29 @@
         ></v-checkbox>
       </v-col>
       <v-col
-        :cols="3"
+        :cols="2"
         style="display: flex; align-items: center; justify-content: center"
       >
         <button @click="model = true">Test</button>
       </v-col>
-      <v-col>
-        <!-- Accordion -->
-        <v-accordion
-          rounded
-          :items="[accordion_item]"
-          style="width: 80%; margin-left: auto; margin-right: auto"
-        >
-          <!-- <template #title="{ item }">
-          <span style="color: blue; font-size: 20px;">{{ item.title }}</span>
-        </template> -->
-          <template #content="{ item }">
-            <v-row style="justify-content: center">
-              <v-col
-                :cols="4"
-                style="display: flex; justify-content: left; align-items: start"
-              >
-                <div v-for="(obj, i) in item.content" :key="i">
-                  <span>{{
-                    i != 0 && i != item.content.length - 1
-                      ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
-                      : obj
-                  }}</span>
-                </div>
-              </v-col>
-            </v-row>
-          </template>
-        </v-accordion>
-      </v-col>
     </v-row>
+    <!-- Accordion -->
+    <v-accordion :items="[accordion_item]" style="margin-top: 30px">
+      <template #content="{ item }">
+        <v-row style="justify-content: center">
+          <v-col :cols="3">
+            <div v-for="(obj, i) in item.content" :key="i">
+              <span>{{
+                i != 0 &&
+                i != item.content.length - 1 
+                  ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
+                  : obj
+              }}</span>
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+    </v-accordion>
     <v-dialog :persistent="persistent" v-model="model">
       <v-card rounded animation outlined>
         <template #title>
@@ -91,31 +78,27 @@ export default {
       },
     };
   },
-  methods: {},
-  mounted() {
-    this.accordion_item.content = [
-      "<v-dialog",
-      ':persistent="' + this.persistent + '"',
-      'v-model="' + this.model + '"',
-      "></v-dialog>",
-    ];
-  },
-  watch: {
-    modelValue() {
+  methods: {
+    checkContent() {
       this.accordion_item.content = [
         "<v-dialog",
         ':persistent="' + this.persistent + '"',
         'v-model="' + this.model + '"',
-        "></v-dialog>",
+        ">",
+        "<v-card></v-card>",
+        "</v-dialog>",
       ];
     },
+  },
+  mounted() {
+    this.checkContent();
+  },
+  watch: {
+    model() {
+      this.checkContent();
+    },
     persistent() {
-      this.accordion_item.content = [
-        "<v-dialog",
-        ':persistent="' + this.persistent + '"',
-        'v-model="' + this.model + '"',
-        "></v-dialog>",
-      ];
+      this.checkContent();
     },
   },
 };

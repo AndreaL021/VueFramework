@@ -13,7 +13,6 @@
       :style="{
         cursor: 'default',
         display: 'inline-block',
-        backgroundColor: 'transparent',
         width: width,
       }"
     >

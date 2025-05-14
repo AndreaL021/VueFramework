@@ -3,13 +3,12 @@
     <v-row
       style="
         width: 70%;
-        border: solid 1px black;
         padding: 5px;
+        border: solid 1px black;
         margin-left: auto;
         margin-right: auto;
-        display: flex;
-        justify-content: space-evenly;
       "
+      justify="space-evenly"
     >
       <!-- titolo -->
       <v-col><h3>v-accordion</h3></v-col>
@@ -30,7 +29,12 @@
       </v-col>
       <v-col
         :cols="4"
-        style="display: flex; align-items: center; justify-content: center"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 40px; margin-top: 20px;
+        "
       >
         <v-accordion
           :items="accordion_items"
@@ -53,18 +57,15 @@
           </template>
         </v-accordion>
       </v-col>
-      <v-col :cols="6">
+      <v-col :cols="6" style="padding: 0px">
         <!-- Accordion -->
-        <v-accordion rounded :items="[accordion_item2]">
+        <v-accordion :items="[accordion_item2]">
           <template #content="{ item }">
-            <v-row style="justify-content: center">
-              <v-col
-                :cols="12"
-                style="display: flex; justify-content: left; align-items: start"
-              >
+            <v-row justify="center">
+              <v-col :cols="12">
                 <div v-for="(obj, i) in item.content" :key="i">
                   <span>{{
-                    i != 0 && i != item.content.length - 1 && obj!==">"
+                    i != 0 && i != item.content.length - 1 && obj !== ">"
                       ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
                       : obj
                   }}</span>
@@ -74,21 +75,23 @@
           </template>
         </v-accordion>
       </v-col>
-      <v-col :cols="6">
+      <v-col :cols="6" style="padding: 0px">
         <!-- Accordion -->
-        <v-accordion rounded :items="[accordion_item3]">
+        <v-accordion :items="[accordion_item3]">
           <template #content="{ item }">
-            <v-row style="justify-content: center">
-              <v-col
-                :cols="12"
-                style="display: flex; justify-content: left; align-items: start"
-              >
+            <v-row justify="center">
+              <v-col :cols="12">
                 <div v-for="(obj, i) in item.content" :key="i">
                   <span>{{
-                   ( i != 0 && i != item.content.length - 1 && obj!='>' && !obj.includes('template'))
-                      ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " + obj
-                      : obj.includes('template')? "&nbsp;&nbsp;&nbsp;&nbsp; "+obj
-                      :obj
+                    i != 0 &&
+                    i != item.content.length - 1 &&
+                    obj != ">" &&
+                    !obj.includes("template")
+                      ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " +
+                        obj
+                      : obj.includes("template")
+                      ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
+                      : obj
                   }}</span>
                 </div>
               </v-col>
@@ -141,90 +144,47 @@ export default {
       },
     };
   },
-  methods: {},
+  methods: {
+    checkContent() {
+      this.accordion_item2.content = [
+        "<v-accordion",
+        ':items="[{ title:"item1", content:""}]"',
+        ':rounded="' + this.rounded + '"',
+        ':autoClose="' + this.autoClose + '"',
+        "></v-accordion>",
+      ];
+      this.accordion_item3.content = [
+        "<v-accordion",
+        '   :items="[{ title:"item1", img:"", des:""}]"',
+        '   :rounded="' + this.rounded + '"',
+        '   :autoClose="' + this.autoClose + '"',
+        ">",
+        '   <template #title="{ item, title }">',
+        "           <div>{{ title }}</div>",
+        "   </template>",
+        '   <template #content="{ item, content }">',
+        '       <div style="display: flex">',
+        '           <img :src="item.img"/>',
+        "           <div>{{ item.des }}</div>",
+        "       </div>",
+        "   </template>",
+        "</v-accordion>",
+      ];
+    },
+  },
   mounted() {
-  this.accordion_items.forEach((item) => {
-    const img = new Image();
-    img.src = item.img;
-    
-  });
-    this.accordion_item2.content = [
-      "<v-accordion",
-      ':items="[{ title:"item1", content:""}]"',
-      ':rounded="' + this.rounded + '"',
-      ':autoClose="' + this.autoClose + '"',
-      "></v-accordion>",
-    ];
-    this.accordion_item3.content = [
-      "<v-accordion",
-      '   :items="[{ title:"item1", img:"", des:""}]"',
-      '   :rounded="' + this.rounded + '"',
-      '   :autoClose="' + this.autoClose + '"',
-      '>',
-      '   <template #title="{ item, title }">',
-      "           <div>{{ title }}</div>",
-      "   </template>",
-      '   <template #content="{ item, content }">',
-      '       <div style="display: flex">',
-      '           <img :src="item.img"/>',
-      "           <div>{{ item.des }}</div>",
-      "       </div>",
-      "   </template>",
-      "</v-accordion>",
-    ];
+    this.accordion_items.forEach((item) => {
+      const img = new Image();
+      img.src = item.img;
+    });
+    this.checkContent();
   },
   watch: {
     rounded() {
-      this.accordion_item2.content = [
-      "<v-accordion",
-      ':items="[{ title:"item1", content:""}]"',
-      ':rounded="' + this.rounded + '"',
-      ':autoClose="' + this.autoClose + '"',
-      "></v-accordion>",
-      ];
-    this.accordion_item3.content = [
-      "<v-accordion",
-      '   :items="[{ title:"item1", img:"", des:""}]"',
-      '   :rounded="' + this.rounded + '"',
-      '   :autoClose="' + this.autoClose + '"',
-      '>',
-      '   <template #title="{ item, title }">',
-      "           <div>{{ title }}</div>",
-      "   </template>",
-      '   <template #content="{ item, content }">',
-      '       <div style="display: flex">',
-      '           <img :src="item.img"/>',
-      "           <div>{{ item.des }}</div>",
-      "       </div>",
-      "   </template>",
-      "</v-accordion>",
-    ];
+      this.checkContent();
     },
     autoClose() {
-      this.accordion_item2.content = [
-      "<v-accordion",
-      ':items="[{ title:"item1", content:""}]"',
-      ':rounded="' + this.rounded + '"',
-      ':autoClose="' + this.autoClose + '"',
-      "></v-accordion>",
-      ];
-    this.accordion_item3.content = [
-      "<v-accordion",
-      '   :items="[{ title:"item1", img:"", des:""}]"',
-      '   :rounded="' + this.rounded + '"',
-      '   :autoClose="' + this.autoClose + '"',
-      '>',
-      '   <template #title="{ item, title }">',
-      "           <div>{{ title }}</div>",
-      "   </template>",
-      '   <template #content="{ item, content }">',
-      '       <div style="display: flex">',
-      '           <img :src="item.img"/>',
-      "           <div>{{ item.des }}</div>",
-      "       </div>",
-      "   </template>",
-      "</v-accordion>",
-    ];
+      this.checkContent();
     },
   },
 };

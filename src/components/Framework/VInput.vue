@@ -26,7 +26,7 @@
     <slot name="appendIcon">
       <fa-i
         v-if="clearable&&modelValue"
-        @click="updateModelValue(modelValue, true)"
+        @click="updateModelValue(modelValue, true);"
         icon="fa-solid fa-circle-xmark"
         class="appendIcon"
         :style="{
@@ -143,8 +143,19 @@ export default {
 };
 </script>
 <style scoped>
+/* Rimuove frecce in Chrome, Safari e Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Rimuove frecce in Firefox */
+input[type="number"] {
+    -moz-appearance: textfield; /* Per Firefox */
+    appearance: textfield; /* Per altri browser */
+}
 .input-container {
-  margin-top: 12px;
   background: rgb(240, 240, 240);
   border: solid grey;
   border-width: 0 0 1px 0;
@@ -154,7 +165,6 @@ export default {
 }
 
 .input-container.outlined {
-  margin-top: 12px;
   border: solid grey 1px;
   transition: border-color 0.3s;
   position: relative;

@@ -1,49 +1,39 @@
 <template>
-  <div>
-    <v-row
-      style="
-        width: 70%;
-        border: solid 1px black;
-        padding: 5px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: space-evenly;
-      "
-    >
+  <div
+    style="
+      width: 70%;
+      border: solid 1px black;
+      padding: 5px;
+      margin-left: auto;
+      margin-right: auto;
+    "
+  >
+    <v-row>
       <!-- titolo -->
       <v-col><h3>v-textarea</h3></v-col>
-      <v-col
-        :cols="3"
-        style="display: flex; justify-content: left; padding-left: 0%"
-      >
+      <v-col :cols="3">
         <v-input
           type="text"
           label="label"
           v-model="label"
           style="margin-right: auto"
         ></v-input>
-        <v-checkbox
-          label="rounded"
-          v-model="rounded"
-          style="margin-right: auto"
-        ></v-checkbox>
-        <v-checkbox
-          label="outlined"
-          v-model="outlined"
-          style="margin-right: auto"
-        ></v-checkbox>
-        <v-checkbox
-          label="resizable"
-          v-model="resizable"
-          style="margin-right: auto"
-        ></v-checkbox>
+      </v-col>
+      <v-col :cols="3" style="display: flex; justify-content: center">
+        <v-checkbox label="rounded" v-model="rounded"></v-checkbox>
+      </v-col>
+      <v-col :cols="3" style="display: flex; justify-content: center">
+        <v-checkbox label="outlined" v-model="outlined"></v-checkbox>
+      </v-col>
+      <v-col :cols="3" style="display: flex; justify-content: center">
+        <v-checkbox label="resizable" v-model="resizable"></v-checkbox>
       </v-col>
       <v-col
-        :cols="3"
-        style="display: flex; align-items: center; justify-content: center"
+        :cols="12"
+        style="margin-top: 40px; margin-bottom: 40px; display: flex; align-items: center; justify-content: center"
       >
         <v-textarea
+          width="250px"
           :rounded="rounded"
           :label="label"
           :outlined="outlined"
@@ -53,35 +43,23 @@
           @input="checkContent"
         ></v-textarea>
       </v-col>
-      <v-col>
-        <!-- Accordion -->
-        <v-accordion
-          rounded
-          :items="[accordion_item]"
-          style="width: 80%; margin-left: auto; margin-right: auto"
-        >
-          <!-- <template #title="{ item }">
-        <span style="color: blue; font-size: 20px;">{{ item.title }}</span>
-      </template> -->
-          <template #content="{ item }">
-            <v-row style="justify-content: center">
-              <v-col
-                :cols="4"
-                style="display: flex; justify-content: left; align-items: start"
-              >
-                <div v-for="(obj, i) in item.content" :key="i">
-                  <span>{{
-                    i != 0 && i != item.content.length - 1
-                      ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
-                      : obj
-                  }}</span>
-                </div>
-              </v-col>
-            </v-row>
-          </template>
-        </v-accordion>
-      </v-col>
     </v-row>
+    <!-- Accordion -->
+    <v-accordion :items="[accordion_item]">
+      <template #content="{ item }">
+        <v-row style="justify-content: center">
+          <v-col :cols="4">
+            <div v-for="(obj, i) in item.content" :key="i">
+              <span>{{
+                i != 0 && i != item.content.length - 1
+                  ? "&nbsp;&nbsp;&nbsp;&nbsp; " + obj
+                  : obj
+              }}</span>
+            </div>
+          </v-col>
+        </v-row>
+      </template>
+    </v-accordion>
   </div>
 </template>
   <script>
@@ -103,66 +81,37 @@ export default {
   },
   methods: {
     checkContent() {
-    this.accordion_item.content = [
-      "<v-textarea",
-      ':rounded="' + this.rounded + '"',
-      ':label="' + this.label + '"',
-      ':outlined="' + this.outlined + '"',
-      ':rows="' + this.rows + '"',
-      ':resizable="' + this.resizable + '"',
-      'v-model="' + this.model + '"',
-      "></v-textarea>",
-    ];
+      this.accordion_item.content = [
+        "<v-textarea",
+        ':rounded="' + this.rounded + '"',
+        ':label="' + this.label + '"',
+        ':outlined="' + this.outlined + '"',
+        ':rows="' + this.rows + '"',
+        ':resizable="' + this.resizable + '"',
+        'width="250px"',
+        'v-model="' + this.model + '"',
+        "></v-textarea>",
+      ];
     },
   },
   mounted() {
-    this.accordion_item.content = [
-      "<v-textarea",
-      ':rounded="' + this.rounded + '"',
-      ':label="' + this.label + '"',
-      ':outlined="' + this.outlined + '"',
-      ':rows="' + this.rows + '"',
-      ':resizable="' + this.resizable + '"',
-      'v-model="' + this.model + '"',
-      "></v-textarea>",
-    ];
+    this.checkContent();
   },
   watch: {
+    model() {
+      this.checkContent();
+    },
+    resizable() {
+      this.checkContent();
+    },
     label() {
-      this.accordion_item.content = [
-        "<v-textarea",
-        ':rounded="' + this.rounded + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':rows="' + this.rows + '"',
-        ':resizable="' + this.resizable + '"',
-        'v-model="' + this.model + '"',
-        "></v-textarea>",
-      ];
+      this.checkContent();
     },
     rounded() {
-      this.accordion_item.content = [
-        "<v-textarea",
-        ':rounded="' + this.rounded + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':rows="' + this.rows + '"',
-        ':resizable="' + this.resizable + '"',
-        'v-model="' + this.model + '"',
-        "></v-textarea>",
-      ];
+      this.checkContent();
     },
     outlined() {
-      this.accordion_item.content = [
-        "<v-textarea",
-        ':rounded="' + this.rounded + '"',
-        ':label="' + this.label + '"',
-        ':outlined="' + this.outlined + '"',
-        ':rows="' + this.rows + '"',
-        ':resizable="' + this.resizable + '"',
-        'v-model="' + this.model + '"',
-        "></v-textarea>",
-      ];
+      this.checkContent();
     },
   },
 };

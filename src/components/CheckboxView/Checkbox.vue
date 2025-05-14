@@ -11,27 +11,27 @@
     <v-row justify="center">
       <!-- titolo -->
       <v-col :cols="4">
-        <h3><br />Boolean</h3>
+        <h3><br /><br />Boolean</h3>
       </v-col>
       <v-col :cols="4">
-        <h3>v-checkbox <br />Number</h3>
+        <h3>v-checkbox <br /><br />Number</h3>
       </v-col>
       <v-col :cols="4">
-        <h3><br />String</h3>
+        <h3><br /><br />String</h3>
       </v-col>
-      <v-col :cols="4" style="padding: 0px;">
+      <v-col :cols="4" style="padding: 2px;">
         <Boolean />
       </v-col>
-      <v-col :cols="4" style="padding: 0px;">
+      <v-col :cols="4" style="padding: 2px;">
         <Number />
       </v-col>
-      <v-col :cols="4" style="padding: 0px;">
+      <v-col :cols="4" style="padding: 2px;">
         <String />
       </v-col>
       <v-col :cols="12">
         <h3><br />Array</h3>
       </v-col>
-      <v-col :cols="12" style="padding: 0px;">
+      <v-col :cols="12" style="padding: 2px;">
         <Array />
       </v-col>
     </v-row>

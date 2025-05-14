@@ -3,7 +3,7 @@
       <input
         type="color"
         ref="colorInput"
-        @input="updateModelValue($event.target.value)"
+        @change="updateModelValue($event.target.value)"
         :style="{
           position: 'absolute',
           visibility: 'hidden',
@@ -53,7 +53,7 @@
       ></div>
       <span
         v-if="label_span"
-        style="color: grey; display: flex; align-items: center;"
+        style="display: flex; align-items: center;"
         >{{ label }}</span
       >
     </div>
@@ -81,7 +81,6 @@
       };
     },
     watch: {
-  
       modelValue(newValue) {
         this.$refs.colorInput.value = newValue;
       },
@@ -110,7 +109,7 @@
   }
   input {
     border: none;
-    padding-left: 0; /* Rimuove il padding a sinistra */
+    padding-left: 0;
     background-color: transparent;
   }
   textarea {

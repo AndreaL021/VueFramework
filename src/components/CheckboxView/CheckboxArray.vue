@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-col :cols="2" justify="center">
+    <v-col :cols="2">
       <v-checkbox
         :rounded="rounded"
         :size="size"
@@ -10,7 +10,7 @@
         @change="checkContent"
       ></v-checkbox>
     </v-col>
-    <v-col :cols="2" justify="center">
+    <v-col :cols="2">
       <v-checkbox
         :rounded="rounded"
         :size="size"
@@ -20,7 +20,7 @@
         @change="checkContent"
       ></v-checkbox>
     </v-col>
-    <v-col :cols="2" justify="center">
+    <v-col :cols="2">
       <v-checkbox
         :rounded="rounded"
         :size="size"
@@ -30,7 +30,7 @@
         @change="checkContent"
       ></v-checkbox>
     </v-col>
-    <v-col :cols="2" justify="center">
+    <v-col :cols="2">
       <v-checkbox
         :rounded="rounded"
         :size="size"
@@ -40,7 +40,7 @@
         @change="checkContent"
       ></v-checkbox>
     </v-col>
-    <v-col :cols="2" justify="center">
+    <v-col :cols="2">
       <v-checkbox
         :rounded="rounded"
         :size="size"
@@ -50,7 +50,7 @@
         @change="checkContent"
       ></v-checkbox>
     </v-col>
-    <v-col :cols="2" justify="center">
+    <v-col :cols="2">
       <v-checkbox
         :rounded="rounded"
         :size="size"
@@ -60,21 +60,17 @@
         @change="checkContent"
       ></v-checkbox>
     </v-col>
-    <v-col :cols="4" style="padding: 0px">
+  </v-row>
       <!-- Accordion -->
       <v-accordion
-        rounded
         :items="[accordion_item]"
         style="
-          width: 100%;
-          margin-left: auto;
-          margin-right: auto;
           margin-top: 10px;
         "
       >
         <template #content="{ item }">
-          <v-row style="justify-content: center">
-            <v-col :cols="12" style="display: block">
+          <v-row justify="center">
+            <v-col :cols="6" style="margin-left: 100px;">
               <div v-for="(obj, i) in item.content" :key="i">
                 <span>{{
                   i != 0 && i != item.content.length - 1
@@ -86,8 +82,6 @@
           </v-row>
         </template>
       </v-accordion>
-    </v-col>
-  </v-row>
 </template>
 <script>
 export default {
@@ -118,27 +112,17 @@ export default {
     },
   },
   mounted() {
-    this.accordion_item.content = [
-      "<v-checkbox",
-      ':rounded="' + this.rounded + '"',
-      ':label="item1"',
-      ":size=\"'" + this.size + "'\"",
-      ':item-value="item1"',
-      'v-model="[' + this.model + ']"',
-      "></v-checkbox>",
-    ];
+    this.checkContent();
   },
   watch: {
+    size() {
+      this.checkContent();
+    },
     rounded() {
-      this.accordion_item.content = [
-        "<v-checkbox",
-        ':rounded="' + this.rounded + '"',
-        ':label="item1"',
-        ":size=\"'" + this.size + "'\"",
-        ':item-value="item1"',
-        'v-model="[' + this.model + ']"',
-        "></v-checkbox>",
-      ];
+      this.checkContent();
+    },
+    model() {
+      this.checkContent();
     },
   },
 };

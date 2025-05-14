@@ -13,7 +13,7 @@
     :style="{
       width: width,
       height: '24px',
-      padding: clearable&&!readonly ? '5px 30px 5px 5px' : '5px 5px 5px 5px',
+      padding: clearable && !readonly ? '5px 30px 5px 5px' : '5px 5px 5px 5px',
     }"
     @blur="onBlur"
   >
@@ -23,16 +23,16 @@
       style="width: 100%; padding-left: 0; margin-top: 10px"
       type="text"
       v-model="model"
-      :readonly="readonly || !search"
-      @input="filtra()"
+      :readonly="readonly || select || multiple"
+      @input="filtra(model)"
       @focus="onFocus"
       @blur="onBlur"
     />
     <!-- @blur="onBlur" -->
     <slot name="appendIcon">
       <fa-i
-        v-if="clearable&&!readonly && model"
-        @click="onFocus, selectItem(model, true)"
+        v-if="clearable && !readonly && model"
+        @click="onfocus, selectItem(model, true)"
         icon="fa-solid fa-circle-xmark"
         class="appendIcon"
         :size="outlined ? 'lg' : null"
@@ -45,11 +45,28 @@
         :style="{ width: '100%' }"
         @mousedown="onDropdownMouseDown"
       >
+        <div v-if="multiple && !select && !readonly">
+          <div class="input_container" style="display: flex; align-items: center;">
+            <span
+              @click="focusInput"
+              style="font-size: 13px; margin-left: 5px; margin-right: 5px"
+              >{{ searchLabel }}</span
+            >
+            <input
+              ref="Search"
+              style="border: solid 1px black; width: 100%; margin-top: 0px"
+              type="text"
+              v-model="search"
+              @input="filtra(search)"
+            />
+          </div>
+        </div>
         <div
           v-for="(item, i) in filteredItems"
           :key="i"
           class="item"
-          @click="selectItem(item)"
+          :class="{ selected: checkSelected(item) }"
+          @click="selectItem(item, false)"
         >
           {{ itemText != null ? item[itemText] : item }}
         </div>
@@ -65,8 +82,12 @@ export default {
       default: "",
     },
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, Array],
       default: "",
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
     },
     items: {
       type: Array,
@@ -100,25 +121,73 @@ export default {
       type: Boolean,
       default: false,
     },
-    search: {
+    select: {
       type: Boolean,
       default: true,
+    },
+    searchLabel: {
+      type: String,
+      default: "search",
     },
   },
   data() {
     return {
       isFocused: false, // Gestisce lo stato di focus
       model: "",
+      search: "",
       filteredItems: [],
       dropdown: false,
       isClickingDropdownItem: false,
     };
   },
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleClickOutside);
+  },
   mounted() {
-    if (!this.itemText && !this.itemValue) {
-      this.model = this.modelValue;
-    }
+    document.addEventListener("click", this.handleClickOutside);
     this.filteredItems = Array.from(this.items);
+    this.updateModelDisplay();
+    if (!this.itemText && !this.itemValue) {
+      if (this.multiple) {
+        let selected = [];
+        this.modelValue.forEach((i) => {
+          let newItem = this.filteredItems.find((a) => a == i);
+          if (newItem) {
+            selected.push(newItem);
+          }
+        });
+        selected.forEach(
+          (item, i) => (this.model = this.model + (i == 0 ? "" : " - ") + item)
+        );
+      } else {
+        this.model = this.modelValue;
+      }
+    } else {
+      if (this.multiple) {
+        let selected = [];
+        this.modelValue.forEach((item) => {
+          let newItem = this.filteredItems.find(
+            (a) => a[this.itemValue] == item
+          );
+          if (newItem) {
+            selected.push(newItem);
+          }
+        });
+        selected.forEach(
+          (item, i) =>
+            (this.model =
+              this.model + (i == 0 ? "" : " - ") + item[this.itemText])
+        );
+      } else {
+        this.model =
+          this.filteredItems.filter((i) => i[this.itemValue] == this.modelValue)
+            .length > 0
+            ? this.filteredItems.filter(
+                (i) => i[this.itemValue] == this.modelValue
+              )[0][this.itemText]
+            : "";
+      }
+    }
   },
   watch: {
     items(newVal) {
@@ -126,11 +195,11 @@ export default {
         this.filteredItems = Array.from(newVal);
       }
     },
-    modelValue(newVal) {
-      if (newVal) {
-        if (this.search) {
-          this.filtra();
-        }
+    modelValue() {
+      this.updateModelDisplay();
+      this.search="";
+      if (!this.select) {
+        this.filtra(null);
       }
     },
   },
@@ -142,58 +211,141 @@ export default {
     },
   },
   methods: {
-    filtra() {
+    updateModelDisplay() {
+      if (!this.itemText && !this.itemValue) {
+        this.model = this.multiple
+          ? this.modelValue.join(" - ")
+          : this.modelValue;
+      } else {
+        if (this.multiple) {
+          const texts = this.modelValue.map((item) => {
+            const temp = this.items.find((a) => a[this.itemValue] == item);
+            return temp ? temp[this.itemText] : "";
+          });
+          this.model = texts.filter(Boolean).join(" - ");
+        } else {
+          const temp = this.items.find(
+            (a) => a[this.itemValue] == this.modelValue
+          );
+          this.model = temp ? temp[this.itemText] : "";
+        }
+      }
+    },
+    handleClickOutside(e) {
+      if (!this.$el.contains(e.target)) {
+        this.dropdown = false;
+        this.isFocused = false;
+      }
+    },
+    checkSelected(item) {
+      if (this.itemText && this.itemValue) {
+        if (this.multiple) {
+          return (
+            this.modelValue.filter((i) => i == item[this.itemValue]).length > 0
+          );
+        } else {
+          return this.model == item[this.itemText];
+        }
+      } else {
+        if (this.multiple) {
+          return this.modelValue.filter((i) => i == item).length > 0;
+        } else {
+          return this.model == item;
+        }
+      }
+    },
+    filtra(item) {
+      if (!item) {
+        this.filteredItems = [...this.items];
+        return;
+      }
       if (this.itemText && this.itemValue) {
         this.filteredItems = this.items.filter((i) =>
           i[this.itemText]
             .toString()
             .toLowerCase()
-            .includes(this.model.toString().toLowerCase())
+            .includes(item.toString().toLowerCase())
         );
       } else {
         this.filteredItems = this.items.filter((i) =>
-          i
-            .toString()
-            .toLowerCase()
-            .includes(this.model.toString().toLowerCase())
+          i.toString().toLowerCase().includes(item.toString().toLowerCase())
         );
       }
     },
     selectItem(item, clear) {
       if (clear) {
         item = "";
+        if (this.multiple) {
+          this.$emit("update:modelValue", []);
+          this.$emit("change");
+          return;
+        } else {
+          this.$emit("update:modelValue", null);
+          this.$emit("change");
+          return;
+        }
       }
-      if (!this.itemValue && !this.itemText) {
-        this.model = item;
-      } else {
-        this.model = item[this.itemText];
-      }
-      this.$emit(
-        "update:modelValue",
-        this.itemValue ? item[this.itemValue] : item
-      );
-      this.$emit("change");
 
-      this.dropdown = false;
+      if (!this.itemValue && !this.itemText) {
+        // Caso semplice (array di valori primitivi)
+        if (this.multiple) {
+          let newVal = [...this.modelValue]; // copia sicura
+          const index = newVal.indexOf(item);
+          if (index >= 0) {
+            newVal.splice(index, 1); // rimuovi
+          } else {
+            newVal.push(item); // aggiungi
+          }
+          this.$emit("update:modelValue", [...newVal]); // emetti nuova copia
+          this.$emit("change");
+        } else {
+          const newVal = this.modelValue === item ? null : item;
+          this.model = newVal || "";
+          this.$emit("update:modelValue", newVal);
+          this.$emit("change");
+        }
+      } else {
+        // Caso con itemText / itemValue
+        if (this.multiple) {
+          let newVal = [...this.modelValue]; // copia sicura
+          const id = item[this.itemValue];
+          const index = newVal.indexOf(id);
+          if (index >= 0) {
+            newVal.splice(index, 1); // rimuovi
+          } else {
+            newVal.push(id); // aggiungi
+          }
+          this.$emit("update:modelValue", [...newVal]); // forza reattività
+          this.$emit("change");
+        } else {
+          const newVal =
+            this.modelValue === item[this.itemValue]
+              ? null
+              : item[this.itemValue];
+          this.$emit("update:modelValue", newVal);
+          this.$emit("change");
+        }
+      }
+
+      if (!this.multiple) {
+        this.dropdown = false;
+      }
+
       this.isClickingDropdownItem = false;
     },
+
     onFocus() {
       this.$refs.Input.focus();
       this.isFocused = true;
       this.dropdown = true;
-      this.filteredItems=Array.from(this.items)
+      this.filteredItems = Array.from(this.items);
     },
     onBlur() {
       if (!this.isClickingDropdownItem) {
         this.isFocused = false;
         this.dropdown = false;
-        if (this.itemText) {
-          this.model = this.filteredItems.find((i)=>i[this.itemValue]==this.modelValue)?
-          this.filteredItems.find((i)=>i[this.itemValue]==this.modelValue)[this.itemText]:"";
-        } else {
-          this.model = this.modelValue;
-        }
       }
+      this.isClickingDropdownItem = false;
     },
     onDropdownMouseDown() {
       this.isClickingDropdownItem = true;
@@ -203,7 +355,6 @@ export default {
 </script>
 <style scoped>
 .input-container {
-  margin-top: 12px;
   background: rgb(240, 240, 240);
   border: solid grey;
   border-width: 0 0 1px 0;
@@ -214,7 +365,6 @@ export default {
 }
 
 .input-container.outlined {
-  margin-top: 12px;
   border: solid grey 1px;
   transition: border-color 0.3s;
   position: relative;
@@ -296,6 +446,9 @@ input:focus {
 }
 .item:hover {
   cursor: pointer;
-  background-color: grey;
+  background-color: rgb(174, 174, 174);
+}
+.selected {
+  background-color: rgb(132, 132, 132);
 }
 </style>
